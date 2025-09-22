@@ -50,3 +50,140 @@ prop.test(x = c(78, 69), n = c(120, 120), conf.level = 0.90)
 prop.test(x = c(78, 69), n = c(120, 120), conf.level = 0.95)
 prop.test(x = c(78, 69), n = c(120, 120), conf.level = 0.99)
 
+
+# comparação de médias ----------------------------------------------------
+
+library(ggplot2)
+library(dplyr)
+
+# Preparar dados para plotagem
+medias <- data.frame(
+  Marca = c("A", "B"),
+  Media = c(mean(marca_A), mean(marca_B)),
+  Lower_95 = c(t.test(marca_A)$conf.int[1], t.test(marca_B)$conf.int[1]),
+  Upper_95 = c(t.test(marca_A)$conf.int[2], t.test(marca_B)$conf.int[2])
+)
+
+ggplot(medias, aes(x = Marca, y = Media, fill = Marca)) +
+  geom_bar(stat = "identity", alpha = 0.7) +
+  geom_errorbar(aes(ymin = Lower_95, ymax = Upper_95), 
+                width = 0.2, color = "black", linewidth = 0.8) +
+  labs(title = "Teor Médio de Cafeína por Marca (IC 95%)",
+       y = "Cafeína (mg/xícara)", x = "Marca") +
+  theme_minimal() +
+  scale_fill_manual(values = c("#8c510a", "#01665e"))
+
+
+# Boxplot -----------------------------------------------------------------
+
+ggplot(dados, aes(x = modelo, y = cafeina_mg, fill = modelo)) +
+  geom_boxplot(alpha = 0.7) +
+  labs(title = "Distribuição do Teor de Cafeína por Marca",
+       y = "Cafeína (mg/xícara)", x = "Marca") +
+  theme_minimal() +
+  scale_fill_manual(values = c("#8c510a", "#01665e")) +
+  stat_summary(fun = mean, geom = "point", shape = 18, size = 3, color = "red")
+  
+
+# Confiança das variâncias ------------------------------------------------
+
+# Calcular ICs para variâncias
+var_ci <- data.frame(
+  Marca = c("A", "B"),
+  Variancia = c(var(marca_A), var(marca_B)),
+  Lower = c(
+    (length(marca_A)-1)*var(marca_A)/qchisq(0.975, length(marca_A)-1),
+    (length(marca_B)-1)*var(marca_B)/qchisq(0.975, length(marca_B)-1)
+  ),
+  Upper = c(
+    (length(marca_A)-1)*var(marca_A)/qchisq(0.025, length(marca_A)-1),
+    (length(marca_B)-1)*var(marca_B)/qchisq(0.025, length(marca_B)-1)
+  )
+)
+
+ggplot(var_ci, aes(x = Marca, y = Variancia, color = Marca)) +
+  geom_point(size = 4) +
+  geom_errorbar(aes(ymin = Lower, ymax = Upper), width = 0.1, linewidth = 1.2) +
+  labs(title = "Variância do Teor de Cafeína (IC 95%)",
+       y = "Variância", x = "Marca") +
+  theme_minimal() +
+  scale_color_manual(values = c("#8c510a", "#01665e"))
+
+
+# Proporção de aprovação --------------------------------------------------------------
+
+# Dados de aprovação
+aprovacao <- data.frame(
+  Marca = c("A", "B"),
+  Proporcao = c(0.65, 0.575),
+  Lower_95 = c(
+    prop.test(78, 120)$conf.int[1],
+    prop.test(69, 120)$conf.int[1]
+  ),
+  Upper_95 = c(
+    prop.test(78, 120)$conf.int[2],
+    prop.test(69, 120)$conf.int[2]
+  )
+)
+
+ggplot(aprovacao, aes(x = Marca, y = Proporcao, fill = Marca)) +
+  geom_bar(stat = "identity", alpha = 0.7) +
+  geom_errorbar(aes(ymin = Lower_95, ymax = Upper_95), 
+                width = 0.2, color = "black", linewidth = 0.8) +
+  labs(title = "Proporção de Aprovação dos Consumidores (IC 95%)",
+       y = "Proporção de Aprovação", x = "Marca") +
+  theme_minimal() +
+  scale_fill_manual(values = c("#8c510a", "#01665e")) +
+  scale_y_continuous(labels = scales::percent, limits = c(0, 0.8))
+
+
+# histogramas --------------------------------------------------------------
+
+ggplot(dados, aes(x = cafeina_mg, fill = modelo)) +
+  geom_histogram(alpha = 0.6, position = "identity", bins = 15) +
+  labs(title = "Distribuição do Teor de Cafeína - Comparação entre Marcas",
+       y = "Frequência", x = "Cafeína (mg/xícara)") +
+  theme_minimal() +
+  scale_fill_manual(values = c("#8c510a", "#01665e")) +
+  facet_wrap(~ modelo, ncol = 1)
+
+
+# Densidade ---------------------------------------------------------------
+
+ggplot(dados, aes(x = cafeina_mg, fill = modelo)) +
+  geom_density(alpha = 0.5) +
+  labs(title = "Densidade do Teor de Cafeína por Marca",
+       y = "Densidade", x = "Cafeína (mg/xícara)") +
+  theme_minimal() +
+  scale_fill_manual(values = c("#8c510a", "#01665e")) +
+  geom_vline(data = group_by(dados, modelo) %>% 
+               summarize(Media = mean(cafeina_mg)),
+             aes(xintercept = Media, color = modelo),
+             linewidth = 1, linetype = "dashed")
+
+
+# Diferença ---------------------------------------------------------------
+
+# Calcular ICs para diferença em múltiplos níveis
+diferencas <- data.frame(
+  Confianca = c("90%", "95%", "99%"),
+  Lower = c(
+    t.test(marca_A, marca_B, conf.level = 0.90)$conf.int[1],
+    t.test(marca_A, marca_B, conf.level = 0.95)$conf.int[1],
+    t.test(marca_A, marca_B, conf.level = 0.99)$conf.int[1]
+  ),
+  Upper = c(
+    t.test(marca_A, marca_B, conf.level = 0.90)$conf.int[2],
+    t.test(marca_A, marca_B, conf.level = 0.95)$conf.int[2],
+    t.test(marca_A, marca_B, conf.level = 0.99)$conf.int[2]
+  )
+)
+
+ggplot(diferencas, aes(x = Confianca, y = (Lower + Upper)/2)) +
+  geom_point(size = 3, color = "#762a83") +
+  geom_errorbar(aes(ymin = Lower, ymax = Upper), 
+                width = 0.1, color = "#762a83", linewidth = 1) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "red") +
+  labs(title = "Diferença entre Médias (A - B) em Diferentes Níveis de Confiança",
+       y = "Diferença de Cafeína (mg)", x = "Nível de Confiança") +
+  theme_minimal()
