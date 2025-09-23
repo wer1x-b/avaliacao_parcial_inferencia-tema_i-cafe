@@ -5,28 +5,28 @@ format:
   pdf:
     number-sections: false
 lang: pt-BR
-geometry: "a4paper, margin=0.7in"
+geometry: "a4paper, top=0.1in, bottom=0.1in, left=0.7in, right=0.7in"
 ---
 
-# Qual fornecedor tem teor de cafeína mais adequado em média?
-- Marca A: 95.24 mg/xícara
-- Marca B: 95.59 mg/xícara
+## Qual fornecedor tem teor de cafeína mais adequado em média?
+- *Marca A*: 95.24 mg/xícara
+- *Marca B:* 95.59 mg/xícara
 
-Conclusão: Equivalentes estatisticamente em todos os níveis de confiança
+*Conclusão:* Equivalentes estatisticamente em todos os níveis de confiança
 
-# Qual fornecedor apresenta maior consistência (menor variabilidade)?
-- Marca A: Variância = 6.24 (baixa variabilidade)
-- Marca B: Variância = 20.01 (alta variabilidade)
+## Qual fornecedor apresenta maior consistência (menor variabilidade)?
+- *Marca A:* Variância = 6.24 (baixa variabilidade)
+- *Marca B:* Variância = 20.01 (alta variabilidade)
 
-Conclusão: Marca A significativamente mais consistente
+*Conclusão:* Marca A significativamente mais consistente
 
-# Qual fornecedor é mais aceito pelos consumidores?
-- Marca A: 65.0% de aprovação
-- Marca B: 57.5% de aprovação
+## Qual fornecedor é mais aceito pelos consumidores?
+- *Marca A:* 65.0% de aprovação
+- *Marca B:* 57.5% de aprovação
 
-Conclusão: Maior aprovação para Marca A, mas sem significância estatística
+*Conclusão:* Maior aprovação para Marca A, mas sem significância estatística
 
-# Síntese:
+### Síntese:
 - As conclusões se mantêm consistentes em 90%, 95% e 99% de confiança
 
 -  Não há evidência de diferença signicativa entre as médias em nenhum nível de confiança
@@ -35,15 +35,15 @@ Conclusão: Maior aprovação para Marca A, mas sem significância estatística
 
 -  Não há diferença estatisticamente signicativa em nenhum nível de confiança;
 
--  Recomendação final
+####  Recomendação final:
  O fornecedor selecionado como principal será: MARCA A
 
-Justificativa Baseada em Evidências:
+Justificativa baseada em evidências:
 
 - Consistência Superior: A Marca A demonstra variabilidade significativamente menor, garantindo qualidade uniforme e previsível para nosso blend premium
 - Aceitação Ligeiramente Maior: Embora não estatisticamente significativa, a preferência dos consumidores inclina-se para a Marca A
 - Equivalência de Qualidade: Ambas atendem ao teor médio requerido, mas apenas a Marca A o faz de forma consistente
 
-Fator Decisivo: A consistência superior da Marca A é o atributo mais crítico para um produto premium, onde a uniformidade impacta diretamente a experiência do consumidor e a reputação da marca.
-
+Fator Decisivo: A consistência superior da Marca A é o atributo mais crítico para um produto premium, onde a uniformidade impacta diretamente a experiência do consumidor e a reputação da marca. Embora a Marca B ainda seja uma excelente opção como fornecedor secundário ou um backup.
+\newpage
 ![comparação de densidade, note que a marca A possui uma menor variação. seus valores se concentram próximos à média](densidade.png)
